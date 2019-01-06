@@ -1,0 +1,9 @@
+# pass this test
+# before publishing on dockerhub
+# just a single command for now
+# create a test script or create multiple *-test.yml files
+# for multiple tests
+# pass 1 to pi.py for just 1 iteration for a quick test
+sut:
+  build: .
+  command: spark-submit --master local[*] /usr/local/spark/examples/src/main/python/pi.py 1
