@@ -4,7 +4,9 @@ LABEL maintainer="Michael West <quagly@gmail.com>"
 USER root
 
 RUN  apt-get -y update && \
-     apt-get install --no-install-recommends -y vim &&\
+     apt-get install --no-install-recommends -y \
+      vim \
+      stow && \
      rm -rf /var/lib/apt/lists/*
 
 USER jovyan
