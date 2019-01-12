@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build --squash --tag docker-spark-create .
+docker build --no-cache --squash --tag docker-spark-create .
