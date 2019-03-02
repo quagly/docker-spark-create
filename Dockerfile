@@ -7,7 +7,10 @@ USER root
 # need to switch to dpkg installation to get more recent scala
 RUN  apt-get -y update && \
      apt-get install --no-install-recommends -y \
+      autoconf \
+      automake \
       gnupg \
+      libsnappy-dev \
       stow \
       vim && \
     rm -rf /var/lib/apt/lists/*
@@ -25,6 +28,18 @@ RUN echo "deb https://dl.bintray.com/sbt/debian /" >> /etc/apt/sources.list.d/sb
     apt-get update && \
     apt-get install sbt && \
     rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+# install snappy command line utility
+# depends on libsnappy which is included in
+# the base image
+RUN git clone git://github.com/kubo/snzip.git && \
+  cd snzip && \
+  ./autogen.sh && \
+  ./configure && \
+  make && \
+  make install && \
+  rm -rf /tmp/snzip
 
 USER jovyan
 
