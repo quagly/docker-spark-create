@@ -1,0 +1,7 @@
+# pass this spark test
+# before publishing on dockerhub
+# creating separate test.yml files for now
+# plan to create a test script
+sut:
+  build: .
+  command: run-example SparkPi 1

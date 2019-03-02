@@ -5,16 +5,18 @@ USER root
 
 # note scala package has compatibility issues with Ubuntu 18.04
 # need to switch to dpkg installation to get more recent scala
-# wget www.scala-lang.org/files/archive/scala-2.11.8.deb
-# dpkg -i scala-2.11.8.deb
-# delete deb
 RUN  apt-get -y update && \
      apt-get install --no-install-recommends -y \
       gnupg \
       stow \
-      vim \
-      scala && \
+      vim && \
     rm -rf /var/lib/apt/lists/*
+
+# install scala from scala-lang deb
+# since there is an issue with ubuntu scala - see above
+RUN wget -q www.scala-lang.org/files/archive/scala-2.12.8.deb && \
+    dpkg -i scala-2.12.8.deb && \
+    rm scala-2.12.8.deb
 
 # install sbt
 # https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html
@@ -27,6 +29,7 @@ RUN echo "deb https://dl.bintray.com/sbt/debian /" >> /etc/apt/sources.list.d/sb
 USER jovyan
 
 ENV PATH $PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+ENV CLASSPATH /usr/local/spark/jars/*
 
 # setup home directory for development
 # not needed for notebook use
