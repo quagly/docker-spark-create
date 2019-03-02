@@ -1,13 +1,28 @@
-FROM jupyter/all-spark-notebook
+FROM jupyter/all-spark-notebook:7f1482f5a136
 LABEL maintainer="Michael West <quagly@gmail.com>"
 
 USER root
 
+# note scala package has compatibility issues with Ubuntu 18.04
+# need to switch to dpkg installation to get more recent scala
+# wget www.scala-lang.org/files/archive/scala-2.11.8.deb
+# dpkg -i scala-2.11.8.deb
+# delete deb
 RUN  apt-get -y update && \
      apt-get install --no-install-recommends -y \
+      gnupg \
+      stow \
       vim \
-      stow && \
-     rm -rf /var/lib/apt/lists/*
+      scala && \
+    rm -rf /var/lib/apt/lists/*
+
+# install sbt
+# https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html
+RUN echo "deb https://dl.bintray.com/sbt/debian /" >> /etc/apt/sources.list.d/sbt.list && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823 && \
+    apt-get update && \
+    apt-get install sbt && \
+    rm -rf /var/lib/apt/lists/*
 
 USER jovyan
 
@@ -22,7 +37,7 @@ RUN mv $HOME/.bashrc $HOME/.bashrc_local
 RUN git clone https://github.com/quagly/dotfiles.git $HOME/.dotfiles
 
 WORKDIR $HOME/.dotfiles
-                                                                                                                                                 RUN stow bash;\
+RUN stow bash;\
   stow vim;\
   stow tmux
 
@@ -34,7 +49,3 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vund
 # added true to the end until I can figure it out
 # maybe still related to no interactivity despite -E?
 RUN vim -E -u NONE -S $HOME/.vimrc +PluginInstall +qall || true
-
-
-
-
