@@ -1,0 +1,6 @@
+# just a test than sbt is installed and runnable
+# if sbt did not download its dependencies then it is very slow
+# so test if it is fast enough
+sut:
+  build: .
+  command: timeout 60 sbt sbtVersion

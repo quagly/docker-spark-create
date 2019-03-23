@@ -42,9 +42,14 @@ RUN git clone git://github.com/kubo/snzip.git && \
   rm -rf /tmp/snzip
 
 USER jovyan
+WORKDIR /home/jovyan
 
 ENV PATH $PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 ENV CLASSPATH /usr/local/spark/jars/*
+
+# run sbt to make it resolve its dependencies
+# so it is quick to use
+RUN sbt sbtVersion
 
 # setup home directory for development
 # not needed for notebook use
