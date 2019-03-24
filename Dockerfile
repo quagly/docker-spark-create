@@ -42,14 +42,10 @@ RUN git clone git://github.com/kubo/snzip.git && \
   rm -rf /tmp/snzip
 
 USER jovyan
-WORKDIR /home/jovyan
+WORKDIR $HOME
 
 ENV PATH $PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 ENV CLASSPATH /usr/local/spark/jars/*
-
-# run sbt to make it resolve its dependencies
-# so it is quick to use
-RUN sbt sbtVersion
 
 # setup home directory for development
 # not needed for notebook use
@@ -65,6 +61,9 @@ RUN stow bash;\
   stow tmux
 
 WORKDIR $HOME
+# run sbt to make it resolve its dependencies
+# so it is quick to use
+RUN sbt sbtVersion
 
 # configure vim
 RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
@@ -72,3 +71,4 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vund
 # added true to the end until I can figure it out
 # maybe still related to no interactivity despite -E?
 RUN vim -E -u NONE -S $HOME/.vimrc +PluginInstall +qall || true
+
